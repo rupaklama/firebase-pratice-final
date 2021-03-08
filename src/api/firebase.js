@@ -3,6 +3,12 @@ import firebase from 'firebase/app';
 // to connect to firestore database
 import 'firebase/firestore';
 
+// need to import auth library from firebase for authentication
+import 'firebase/auth';
+
+// to store files
+import 'firebase/storage';
+
 const config = {
   apiKey: 'AIzaSyC8_apxJoAx6YzmTyv3pKlGCbH1KrsxLqo',
   authDomain: 'test-app-basic-final.firebaseapp.com',
@@ -16,8 +22,23 @@ const config = {
 // initialize firebase configuration in our app
 firebase.initializeApp(config);
 
-// accessing firebase firestore database service with our app
-const firestore = firebase.firestore();
+// initialize firebase authentication
+firebase.auth();
+
+// server timestamp to add in any documents
+export const firebaseTimestamp = firebase.firestore.FieldValue.serverTimestamp;
+
+// initialize firestore database
+const db = firebase.firestore();
+
+// initialize firebase storage
+export const storage = firebase.storage();
+// to create storage reference object like with collection/document using ref() method
+// since there's no default reference object for storage
+export const storageRef = storage.ref();
+// Reference Object to store images
+// child method is to create a relative file path from this reference
+export const usersRef = storageRef.child('images/users/');
 
 // NOTE- We get the snapshotObject from the referenceObject using
 // the .get() method. ie. documentRef.get() or collectionRef.get()
@@ -26,15 +47,18 @@ const firestore = firebase.firestore();
 // collectionRef returns all the document objects
 
 // collectionRef object
-export const carsCollection = firestore.collection('cars');
+export const carsCollection = db.collection('cars');
+
+// user collection
+export const usersCollection = db.collection('users');
 
 // documentRef object
-export const siteDocumentRef = firestore.doc('site/business'); // collection/document
+export const siteDocumentRef = db.doc('site/business'); // collection/document
 
 // We can get all the documents in the Collection by calling the .docs property.
 // It returns an array of our documents as documentSnapshot objects.
 // '.docs property' is same as Collection Reference object
-export const empoyeeRef = firestore
+export const empoyeeRef = db
   .collection('site')
   .doc('employees')
   .collection('admins');
@@ -47,8 +71,7 @@ export const empoyeeRef = firestore
 
 // We get the snapshotObject from the referenceObject using
 // the .get() method. ie. documentRef.get() or collectionRef.get()
-firestore
-  .collection('cars')
+db.collection('cars')
   .get()
   .then(snapshot => {
     console.log(snapshot);

@@ -21,11 +21,15 @@ const Cars = () => {
       // second arg is the comparison operator
       // third arg is the value for comparison
       // .where('color', '==', 'red')
-      .where('price', '>=', 300)
-      .where('price', '<=', 1000000)
+      // .where('price', '>=', 300)
+      // .where('price', '<=', 1000000)
 
       // order by method query
-      .orderBy('price', 'asc')
+      // .orderBy('price') // default is ascending
+      .orderBy('price', 'desc')
+      // .orderBy('createdAt', 'asc') // by timestamp
+      // .limit(20) // number of items to display
+      // .limitToLast(20) // last - 20 items
       .get()
       .then(snapshot => {
         // firebaseLooper is a helper function with 'id' property

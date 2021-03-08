@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react';
+import { carsCollection, firebaseTimestamp } from '../../api/firebase';
 
 const Form = () => {
   const [state, setState] = useState({
@@ -20,7 +21,17 @@ const Form = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    console.log(state);
+    // console.log(state);
+    // We can also add documents to collections using the collectionRef object using the .add() method.
+    // collectionRef.add({//value: prop})
+    carsCollection
+      .add({
+        ...state,
+        price: Number(state.price),
+        createdAt: firebaseTimestamp(),
+      })
+      .then(data => console.log(data))
+      .catch(err => console.log(err));
 
     setState({ brand: '', color: '', price: '', available: false });
   };
@@ -35,6 +46,7 @@ const Form = () => {
             name='brand'
             value={brand}
             onChange={onChangeHandler}
+            required
           />
         </div>
 
@@ -46,6 +58,7 @@ const Form = () => {
             name='color'
             value={color}
             onChange={onChangeHandler}
+            required
           />
         </div>
 
@@ -57,6 +70,7 @@ const Form = () => {
             name='price'
             value={price}
             onChange={onChangeHandler}
+            required
           />
         </div>
 
